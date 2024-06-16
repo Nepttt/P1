@@ -21,12 +21,20 @@ public class PlayerAttack : MonoBehaviour
     public static float c1timer = 0;
     public GameObject skill1; //스킬 1 오브젝트(prefab)
     public static bool sk1using;//스킬 1 사용가능여부
-
+    //스킬 1 ui
+    public Button btn; //(버튼 혹은 캔버스)
+    public TMP_Text t; //스킬 쿨타임 표시 텍스트
+    
     //스킬 2
     public static float cooltime2 = 5f; //쿨타임
     public static float c2timer = 0;
     public GameObject skill2; //스킬 2 오브젝트(prefab)
     public static bool sk2using; //스킬 2 사용가능여부
+ void Start()
+ {
+    btn = GameObject.Find("skill1button").GetComponent<Button>();
+    t = GameObject.Find("skill1text").GetComponent<TMP_Text>();
+ }
   void Update()
   {
       Attack();
@@ -127,5 +135,29 @@ public class PlayerAttack : MonoBehaviour
         }
         c2timer = 0;
         c2timer += Time.deltaTime;
+    }
+    void Cooltime()
+    {
+        if (sk1using)
+        {
+            btn.image.color = new Color(0.5f,0.5f, 0.5f, 1);
+        }
+        else
+        {
+            btn.image.color = new Color(1, 1, 1, 1);
+        }
+    }
+    void Timer()
+    {
+        int cooltime = Mathf.CeilToInt(cooltime1 - c1timer);
+        string ct = cooltime.ToString();
+        if (sk1using)
+        {
+            t.text = ct;
+        }
+        else
+        {
+            t.text = "";
+        }
     }
 }
