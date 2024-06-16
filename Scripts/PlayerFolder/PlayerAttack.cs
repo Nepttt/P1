@@ -22,18 +22,25 @@ public class PlayerAttack : MonoBehaviour
     public GameObject skill1; //스킬 1 오브젝트(prefab)
     public static bool sk1using;//스킬 1 사용가능여부
     //스킬 1 ui
-    public Button btn; //(버튼 혹은 캔버스)
-    public TMP_Text t; //스킬 쿨타임 표시 텍스트
+    public Button btn1; //(버튼 혹은 캔버스)
+    public TMP_Text t1; //스킬 쿨타임 표시 텍스트
     
     //스킬 2
     public static float cooltime2 = 5f; //쿨타임
     public static float c2timer = 0;
     public GameObject skill2; //스킬 2 오브젝트(prefab)
     public static bool sk2using; //스킬 2 사용가능여부
+    //스킬 2 ui
+    public Button btn2;
+    public TMP_Text t2;
+    
  void Start()
  {
-    btn = GameObject.Find("skill1button").GetComponent<Button>();
-    t = GameObject.Find("skill1text").GetComponent<TMP_Text>();
+    btn1 = GameObject.Find("skill1button").GetComponent<Button>();
+    t1 = GameObject.Find("skill1text").GetComponent<TMP_Text>();
+    
+    btn2 = GameObject.Find("skill2button").GetComponent<Button>();
+    t2 = GameObject.Find("skill2text").GetComponent<TMP_Text>();
  }
   void Update()
   {
@@ -41,6 +48,8 @@ public class PlayerAttack : MonoBehaviour
       Fire();
       Skill1();
       Skill2();
+      Skill_ui1();
+      Skill_ui2();
   }
   void Attack()
   {
@@ -136,28 +145,33 @@ public class PlayerAttack : MonoBehaviour
         c2timer = 0;
         c2timer += Time.deltaTime;
     }
-    void Cooltime()
+    void Skill_ui1() //스킬 ui
     {
+        string ct1 = Mathf.CeilToInt(cooltime1 - c1timer).ToString(); //쿨타임 표시, 일의 자리 반올림
+         
         if (sk1using)
         {
-            btn.image.color = new Color(0.5f,0.5f, 0.5f, 1);
+            btn1.image.color = new Color(0.5f,0.5f, 0.5f, 1); //스킬 사용 불가 상태일때 어두워짐
+            t1.text = ct1;
         }
         else
         {
-            btn.image.color = new Color(1, 1, 1, 1);
+            btn1.image.color = new Color(1, 1, 1, 1); //스킬 사용 가능 시
+            t1.text = "";
         }
     }
-    void Timer()
+    void Skill_ui2()
     {
-        int cooltime = Mathf.CeilToInt(cooltime1 - c1timer);
-        string ct = cooltime.ToString();
-        if (sk1using)
+        string ct2 = Mathf.CeilToInt(cooltime2 - c2timer).ToString(); //쿨타임 표시, 일의 자리 반올림
+        if (sk2using)
         {
-            t.text = ct;
+            btn2.image.color = new Color(0.5f, 0.5f, 0.5f, 1);//스킬 사용 불가 상태일때 어두워짐
+            t2.text = ct2;
         }
         else
         {
-            t.text = "";
+            btn2.image.color = new Color(1, 1, 1, 1); //스킬 사용 가능 시
+            t2.text = "";
         }
     }
 }
