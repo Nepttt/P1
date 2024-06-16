@@ -6,14 +6,33 @@ using static UnityEngine.GraphicsBuffer;
 
 public class PlayerAttack : MonoBehaviour
 {
+    //플레이어 보는 방향
     public static bool watchr;
     public static bool watchl;
+
+    //근거리 공격 히트박스
     public GameObject hitbox;
+
+    //원거리
     public GameObject bullet;
+
+    //스킬 1
+    public static float cooltime1 = 5f; //쿨타임
+    public static float c1timer = 0;
+    public GameObject skill1; //스킬 1 오브젝트(prefab)
+    public static bool sk1using;//스킬 1 사용가능여부
+
+    //스킬 2
+    public static float cooltime2 = 5f; //쿨타임
+    public static float c2timer = 0;
+    public GameObject skill2; //스킬 2 오브젝트(prefab)
+    public static bool sk2using; //스킬 2 사용가능여부
   void Update()
   {
       Attack();
       Fire();
+      Skill1();
+      Skill2();
   }
   void Attack()
   {
@@ -58,5 +77,55 @@ public class PlayerAttack : MonoBehaviour
           timer = 0;
       }
       timer += Time.deltaTime;
+    }
+    void Skill1()
+    {
+        if (c1timer > cooltime1)
+        {
+            sk1using = false;
+        }
+        else
+        {
+            sk1using = true;
+        }
+        if (Input.GetKey(KeyCode.E) && c1timer > cooltime1)//스킬 쿨타임 조절하려면 cooltime1조절하세요
+        {
+            if (Player.watchl)
+            {
+                for (float i = 0; i <= 1; i += 0.5f)
+                {
+                    Instantiate(skill1, new Vector3(transform.position.x + (-i - 2.5f), 
+                    transform.position.y + 5f, 0), transform.rotation); //캐릭터 왼쪽 위 (위에서 떨어짐)
+                }
+            }
+            if (Player.watchr)
+            {
+                for (float i = 0; i <= 1; i += 0.5f)
+                {
+                    Instantiate(skill1, new Vector3(transform.position.x + (i + 2.5f), 
+                    transform.position.y + 5f, 0), transform.rotation); //캐릭터 오른쪽 위 (위에서 떨어짐)
+                }
+            }
+            c1timer = 0;
+        }
+        c1timer += Time.deltaTime;
+    }
+    void Skill2()
+    {
+        if (c2timer > cooltime2)
+        {
+            sk2using = false;
+        }
+        else
+        {
+            sk2using = true;
+        }
+        if (Input.GetKey(KeyCode.Q) && c2timer > cooltime2) //마찬가지로 쿨타임 변경하려면 cooltime2 조절하세요
+        {
+            Instantiate(skill2, new Vector3(transform.position.x + 0.17f, 
+            transform.position.y - 0.03f, 0), transform.rotation); //캐릭터의 위치에서 생성
+        }
+        c2timer = 0;
+        c2timer += Time.deltaTime;
     }
 }
