@@ -18,13 +18,13 @@ public class PlayerAttack : MonoBehaviour
   void Attack()
   {
     //근접 공격
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S))//키 바꾸기
         {
-            GetComponent<Animator>().SetBool("Isattacking", true);
+            GetComponent<Animator>().SetBool("Isattacking", true);//애니메이션 재생
         }
         else
         {
-            GetComponent<Animator>().SetBool("Isattacking", false);
+            GetComponent<Animator>().SetBool("Isattacking", false);//애니메이션 끊기
         }
         //애니메이션 상태 확인 
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("closeat") == true)
@@ -35,12 +35,12 @@ public class PlayerAttack : MonoBehaviour
                 if (watchr)
                 {
                     hitbox.transform.position = new Vector3(transform.position.x + 0.7f, 
-                        transform.position.y, 0);
+                        transform.position.y, 0); //수치 변경
                 }
                 else if (watchl)
                 {
                     hitbox.transform.position = new Vector3(transform.position.x - 0.8f, 
-                        transform.position.y, 0);
+                        transform.position.y, 0); //수치 변경
                 }
             }
             else
