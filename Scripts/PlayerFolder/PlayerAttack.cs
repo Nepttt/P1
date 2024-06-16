@@ -45,9 +45,12 @@ public class PlayerAttack : MonoBehaviour
   void Update()
   {
       Attack();
+      
       Fire();
+      
       Skill1();
       Skill2();
+      
       Skill_ui1();
       Skill_ui2();
   }
@@ -107,7 +110,7 @@ public class PlayerAttack : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.E) && c1timer > cooltime1)//스킬 쿨타임 조절하려면 cooltime1조절하세요
         {
-            if (Player.watchl)
+            if (watchl)
             {
                 for (float i = 0; i <= 1; i += 0.5f)
                 {
@@ -115,7 +118,7 @@ public class PlayerAttack : MonoBehaviour
                     transform.position.y + 5f, 0), transform.rotation); //캐릭터 왼쪽 위 (위에서 떨어짐)
                 }
             }
-            if (Player.watchr)
+            if (watchr)
             {
                 for (float i = 0; i <= 1; i += 0.5f)
                 {
