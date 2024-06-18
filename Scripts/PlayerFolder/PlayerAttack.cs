@@ -8,183 +8,183 @@ using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
 {
-    //ÇÃ·¹ÀÌ¾î º¸´Â ¹æÇâ
-    public static bool watchr;
-    public static bool watchl;
+//í”Œë ˆì´ì–´ ë³´ëŠ” ë°©í–¥
+public static bool watchr;
+public static bool watchl;
 
-    //±Ù°Å¸® °ø°İ È÷Æ®¹Ú½º
-    public GameObject hitbox;
+//ê·¼ê±°ë¦¬ ê³µê²© íˆíŠ¸ë°•ìŠ¤
+public GameObject hitbox;
 
-    //¿ø°Å¸®
-    public GameObject bullet;
+//ì›ê±°ë¦¬
+public GameObject bullet;
 
-    //½ºÅ³ 1
-    public static float cooltime1 = 5f; //ÄğÅ¸ÀÓ
-    public static float c1timer = 0;
-    public GameObject skill1; //½ºÅ³ 1 ¿ÀºêÁ§Æ®(prefab)
-    public static bool sk1using;//½ºÅ³ 1 »ç¿ë°¡´É¿©ºÎ
-    //½ºÅ³ 1 ui
-    public Button btn1; //(¹öÆ° È¤Àº Äµ¹ö½º)
-    public TMP_Text t1; //½ºÅ³ ÄğÅ¸ÀÓ Ç¥½Ã ÅØ½ºÆ®
+//ìŠ¤í‚¬ 1
+public static float cooltime1 = 5f; //ì¿¨íƒ€ì„
+public static float c1timer = 0;
+public GameObject skill1; //ìŠ¤í‚¬ 1 ì˜¤ë¸Œì íŠ¸(prefab)
+public static bool sk1using;//ìŠ¤í‚¬ 1 ì‚¬ìš©ê°€ëŠ¥ì—¬ë¶€
+//ìŠ¤í‚¬ 1 ui
+public Button btn1; //(ë²„íŠ¼ í˜¹ì€ ìº”ë²„ìŠ¤)
+public TMP_Text t1; //ìŠ¤í‚¬ ì¿¨íƒ€ì„ í‘œì‹œ í…ìŠ¤íŠ¸
 
-    //½ºÅ³ 2
-    public static float cooltime2 = 5f; //ÄğÅ¸ÀÓ
-    public static float c2timer = 0;
-    public GameObject skill2; //½ºÅ³ 2 ¿ÀºêÁ§Æ®(prefab)
-    public static bool sk2using; //½ºÅ³ 2 »ç¿ë°¡´É¿©ºÎ
-    //½ºÅ³ 2 ui
-    public Button btn2;
-    public TMP_Text t2;
-    float delay = 0.5f;
-    float timer = 0f;
+//ìŠ¤í‚¬ 2
+public static float cooltime2 = 5f; //ì¿¨íƒ€ì„
+public static float c2timer = 0;
+public GameObject skill2; //ìŠ¤í‚¬ 2 ì˜¤ë¸Œì íŠ¸(prefab)
+public static bool sk2using; //ìŠ¤í‚¬ 2 ì‚¬ìš©ê°€ëŠ¥ì—¬ë¶€
+//ìŠ¤í‚¬ 2 ui
+public Button btn2;
+public TMP_Text t2;
+float delay = 0.5f;
+float timer = 0f;
 
-    Animator anim;
+Animator anim;
 
-    void Start()
-    {
-        btn1 = GameObject.Find("skill1button").GetComponent<Button>();
-        t1 = GameObject.Find("skill1text").GetComponent<TMP_Text>();
+void Start()
+{
+btn1 = GameObject.Find("skill1button").GetComponent<Button>();
+t1 = GameObject.Find("skill1text").GetComponent<TMP_Text>();
 
-        btn2 = GameObject.Find("skill2button").GetComponent<Button>();
-        t2 = GameObject.Find("skill2text").GetComponent<TMP_Text>();
+btn2 = GameObject.Find("skill2button").GetComponent<Button>();
+t2 = GameObject.Find("skill2text").GetComponent<TMP_Text>();
 
-        anim = GetComponent<Animator>();
+anim = GetComponent<Animator>();
 
-        hitbox = GameObject.Find("Hitbox").GetComponent<GameObject>();;
-    }
-    void Update()
-    {
-        Attack();
+hitbox = GameObject.Find("Hitbox").GetComponent<GameObject>();;
+}
+void Update()
+{
+Attack();
 
-        Fire();
+Fire();
 
-        Skill1();
-        Skill2();
+Skill1();
+Skill2();
 
-        Skill_ui1();
-        Skill_ui2();
-    }
-    void Attack()
-    {
-        //±ÙÁ¢ °ø°İ
-        if (Input.GetKey(KeyCode.S))//Å° ¹Ù²Ù±â
-        {
-            GetComponent<Animator>().SetBool("Isattacking", true);//¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
-        }
-        else
-        {
-            GetComponent<Animator>().SetBool("Isattacking", false);//¾Ö´Ï¸ŞÀÌ¼Ç ²÷±â
-        }
-        //¾Ö´Ï¸ŞÀÌ¼Ç »óÅÂ È®ÀÎ 
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("closeat") == true)
-        {
-            float animTime = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
-            if (animTime >= 0 && animTime < 0.5f)
-            {
-                if (watchr)
-                {
-                    hitbox.transform.position = new Vector3(transform.position.x + 0.7f,
-                        transform.position.y, 0); //¼öÄ¡ º¯°æ
-                }
-                else if (watchl)
-                {
-                    hitbox.transform.position = new Vector3(transform.position.x - 0.8f,
-                        transform.position.y, 0); //¼öÄ¡ º¯°æ
-                }
-            }
-            else
-            {
-                hitbox.transform.position = new Vector3(0, 100, 0);
-            }
-        }
-    }
-    void Fire()
-    {
-        //ÃÑ ¹ß»ç
-        if (timer > delay && Input.GetKey(KeyCode.F))//ÃÑ ¹ß»ç µô·¹ÀÌ
-        {
-            Instantiate(bullet, transform.position, transform.rotation);//ÃÑ¾Ë ¹ß»ç
-            timer = 0;
-        }
-        timer += Time.deltaTime;
-    }
-    void Skill1()
-    {
-        if (c1timer > cooltime1)//½ºÅ³ »ç¿ë ¿©ºÎ(ui¿¡¼­ ÇÊ¿ä)
-        {
-            sk1using = false;
-        }
-        else
-        {
-            sk1using = true;
-        }
-        if (Input.GetKey(KeyCode.E) && c1timer > cooltime1)//½ºÅ³ ÄğÅ¸ÀÓ Á¶ÀıÇÏ·Á¸é cooltime1Á¶ÀıÇÏ¼¼¿ä
-        {
-            if (watchl)
-            {
-                for (float i = 0; i <= 1; i += 0.5f)
-                {
-                    Instantiate(skill1, new Vector3(transform.position.x + (-i - 2.5f),
-                    transform.position.y + 5f, 0), transform.rotation); //Ä³¸¯ÅÍ ¿ŞÂÊ À§ (À§¿¡¼­ ¶³¾îÁü)
-                }
-            }
-            if (watchr)
-            {
-                for (float i = 0; i <= 1; i += 0.5f)
-                {
-                    Instantiate(skill1, new Vector3(transform.position.x + (i + 2.5f),
-                    transform.position.y + 5f, 0), transform.rotation); //Ä³¸¯ÅÍ ¿À¸¥ÂÊ À§ (À§¿¡¼­ ¶³¾îÁü)
-                }
-            }
-            c1timer = 0;
-        }
-        c1timer += Time.deltaTime;
-    }
-    void Skill2()
-    {
-        if (c2timer > cooltime2)//ui¿¡¼­ ÇÊ¿ä
-        {
-            sk2using = false;
-        }
-        else
-        {
-            sk2using = true;
-        }
-        if (Input.GetKey(KeyCode.Q) && c2timer > cooltime2) //¸¶Âù°¡Áö·Î ÄğÅ¸ÀÓ º¯°æÇÏ·Á¸é cooltime2 Á¶ÀıÇÏ¼¼¿ä
-        {
-            Instantiate(skill2, new Vector3(transform.position.x + 0.17f,
-            transform.position.y - 0.03f, 0), transform.rotation); //Ä³¸¯ÅÍÀÇ À§Ä¡¿¡¼­ »ı¼º
-        }
-        c2timer = 0;
-        c2timer += Time.deltaTime;
-    }
-    void Skill_ui1() //½ºÅ³ ui
-    {
-        string ct1 = Mathf.CeilToInt(cooltime1 - c1timer).ToString(); //ÄğÅ¸ÀÓ Ç¥½Ã, ÀÏÀÇ ÀÚ¸® ¹İ¿Ã¸²
+Skill_ui1();
+Skill_ui2();
+}
+void Attack()
+{
+//ê·¼ì ‘ ê³µê²©
+if (Input.GetKey(KeyCode.S))//í‚¤ ë°”ê¾¸ê¸°
+{
+GetComponent<Animator>().SetBool("Isattacking", true);//ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ
+}
+else
+{
+GetComponent<Animator>().SetBool("Isattacking", false);//ì• ë‹ˆë©”ì´ì…˜ ëŠê¸°
+}
+//ì• ë‹ˆë©”ì´ì…˜ ìƒíƒœ í™•ì¸ 
+if (anim.GetCurrentAnimatorStateInfo(0).IsName("closeat") == true)
+{
+float animTime = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
+if (animTime >= 0 && animTime < 0.5f)
+{
+if (watchr)
+{
+hitbox.transform.position = new Vector3(transform.position.x + 0.7f,
+transform.position.y, 0); //ìˆ˜ì¹˜ ë³€ê²½
+}
+else if (watchl)
+{
+hitbox.transform.position = new Vector3(transform.position.x - 0.8
+transform.position.y, 0); //ìˆ˜ì¹˜ ë³€ê²½
+}
+}
+else
+{
+hitbox.transform.position = new Vector3(0, 100, 0);
+}
+}
+}
+void Fire()
+{
+//ì´ ë°œì‚¬
+if (timer > delay && Input.GetKey(KeyCode.F))//ì´ ë°œì‚¬ ë”œë ˆì´
+{
+Instantiate(bullet, transform.position, transform.rotation);//ì´ì•Œ ë°œì‚¬
+timer = 0;
+}
+timer += Time.deltaTime;
+}
+void Skill1()
+{
+if (c1timer > cooltime1)//ìŠ¤í‚¬ ì‚¬ìš© ì—¬ë¶€(uiì—ì„œ í•„ìš”)
+{
+sk1using = false;
+}
+else
+{
+sk1using = true;
+}
+if (Input.GetKey(KeyCode.E) && c1timer > cooltime1)//ìŠ¤í‚¬ ì¿¨íƒ€ì„ ì¡°ì ˆí•˜ë ¤ë©´ cooltime1ì¡°ì ˆí•˜ì„¸ìš”
+{
+if (watchl)
+{
+for (float i = 0; i <= 1; i += 0.5f)
+{
+Instantiate(skill1, new Vector3(transform.position.x + (-i - 2.5f),
+transform.position.y + 5f, 0), transform.rotation); //ìºë¦­í„° ì™¼ìª½ ìœ„ (ìœ„ì—ì„œ ë–¨ì–´ì§)
+}
+}
+if (watchr)
+{
+for (float i = 0; i <= 1; i += 0.5f)
+{
+Instantiate(skill1, new Vector3(transform.position.x + (i + 2.5f),
+transform.position.y + 5f, 0), transform.rotation); //ìºë¦­í„° ì˜¤ë¥¸ìª½ ìœ„ (ìœ„ì—ì„œ ë–¨ì–´ì§)
+}
+}
+c1timer = 0;
+}
+c1timer += Time.deltaTime;
+}
+void Skill2()
+{
+if (c2timer > cooltime2)//uiì—ì„œ í•„ìš”
+{
+sk2using = false;
+}
+else
+{
+sk2using = true;
+}
+if (Input.GetKey(KeyCode.Q) && c2timer > cooltime2) //ë§ˆì°¬ê°€ì§€ë¡œ ì¿¨íƒ€ì„ ë³€ê²½í•˜ë ¤ë©´ cooltime2 ì¡°ì ˆí•˜ì„¸ìš”
+{
+Instantiate(skill2, new Vector3(transform.position.x + 0.17f,
+transform.position.y - 0.03f, 0), transform.rotation); //ìºë¦­í„°ì˜ ìœ„ì¹˜ì—ì„œ ìƒì„±
+}
+c2timer = 0;
+c2timer += Time.deltaTime;
+}
+void Skill_ui1() //ìŠ¤í‚¬ ui
+{
+string ct1 = Mathf.CeilToInt(cooltime1 - c1timer).ToString(); //ì¿¨íƒ€ì„ í‘œì‹œ, ì¼ì˜ ìë¦¬ ë°˜ì˜¬ë¦¼
 
-        if (sk1using)
-        {
-            btn1.image.color = new Color(0.5f, 0.5f, 0.5f, 1); //½ºÅ³ »ç¿ë ºÒ°¡ »óÅÂÀÏ¶§ ¾îµÎ¿öÁü
-            t1.text = ct1;
-        }
-        else
-        {
-            btn1.image.color = new Color(1, 1, 1, 1); //½ºÅ³ »ç¿ë °¡´É ½Ã
-            t1.text = "";
-        }
-    }
-    void Skill_ui2()
-    {
-        string ct2 = Mathf.CeilToInt(cooltime2 - c2timer).ToString(); //ÄğÅ¸ÀÓ Ç¥½Ã, ÀÏÀÇ ÀÚ¸® ¹İ¿Ã¸²
-        if (sk2using)
-        {
-            btn2.image.color = new Color(0.5f, 0.5f, 0.5f, 1);//½ºÅ³ »ç¿ë ºÒ°¡ »óÅÂÀÏ¶§ ¾îµÎ¿öÁü
-            t2.text = ct2;
-        }
-        else
-        {
-            btn2.image.color = new Color(1, 1, 1, 1); //½ºÅ³ »ç¿ë °¡´É ½Ã
-            t2.text = "";
-        }
-    }
+if (sk1using)
+{
+btn1.image.color = new Color(0.5f, 0.5f, 0.5f, 1); //ìŠ¤í‚¬ ì‚¬ìš© ë¶ˆê°€ ìƒíƒœì¼ë•Œ ì–´ë‘ì›Œì§
+t1.text = ct1;
+}
+else
+{
+btn1.image.color = new Color(1, 1, 1, 1); //ìŠ¤í‚¬ ì‚¬ìš© ê°€ëŠ¥ ì‹œ
+t1.text = "";
+}
+}
+void Skill_ui2()
+{
+string ct2 = Mathf.CeilToInt(cooltime2 - c2timer).ToString(); //ì¿¨íƒ€ì„ í‘œì‹œ, ì¼ì˜ ìë¦¬ ë°˜ì˜¬ë¦¼
+if (sk2using)
+{
+btn2.image.color = new Color(0.5f, 0.5f, 0.5f, 1);//ìŠ¤í‚¬ ì‚¬ìš© ë¶ˆê°€ ìƒíƒœì¼ë•Œ ì–´ë‘ì›Œì§
+t2.text = ct2;
+}
+else
+{
+btn2.image.color = new Color(1, 1, 1, 1); //ìŠ¤í‚¬ ì‚¬ìš© ê°€ëŠ¥ ì‹œ
+t2.text = "";
+}
+}
 }
